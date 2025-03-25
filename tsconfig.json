@@ -8,6 +8,5 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["client/src/**/*.ts"],
   "exclude": ["node_modules"]
 }
