@@ -5,12 +5,23 @@
             "src": "server/dist/index.js",
             "use": "@vercel/node",
             "config": { "includeFiles": ["dist/**"] }
-        }
-    ],
-    "routes": [
+        },
         {
-            "src": "/(.*)",
-            "dest": "server/dist/index.js"
-        }
-    ]
+            "src": "client/package.json",
+            "use": "@vercel/static-build",
+            "config": {
+              "distDir": "dist"
+            }
+          }
+    ],
+    "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/server/index.js"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/server/index.js"
+    }
+  ]
 }
