@@ -7,14 +7,14 @@ if (!API_KEY) {
     throw new Error('Missing API key to CoinGecko')
 }
 
-// // supported currencies list
+// supported currencies list
 router.get('/currencies', async (req: Request, res: Response) => {
     const url = 'https://api.coingecko.com/api/v3/simple/supported_vs_currencies';
     const options = {
     method: 'GET',
-    headers: {accept: 'application/json', 'x-cg-pro-api-key': API_KEY}
+    headers: {accept: 'application/json', 'x-cg-demo-api-key': API_KEY}
     };
-
+    res.header("Access-Control-Allow-Origin", "*");
     const {data} = await axios.get(url, options)
     res.json(data)
 })
@@ -26,7 +26,7 @@ router.get('/coins', async (req: Request, res: Response) => {
     method: 'GET',
     headers: {accept: 'application/json', 'x-cg-demo-api-key': API_KEY}
     };
-
+    res.header("Access-Control-Allow-Origin", "*");
     const {data} = await axios.get(url, options)
     res.json(data)
 })
@@ -38,8 +38,20 @@ router.get('/coins/:id/:currency?', async (req: Request, res: Response) => {
     method: 'GET',
     headers: {accept: 'application/json', 'x-cg-demo-api-key': API_KEY}
     };
+    res.header("Access-Control-Allow-Origin", "*");
+    const {data} = await axios.get(url, options)
+    res.json(data)
+})
 
-    const {data} = await axios.get(url + req.params.id, options)
+// coin historical chart data
+router.get('/chart/:id', async (req: Request, res: Response) => {
+    const url = `https://api.coingecko.com/api/v3/coins/${req.params.id}/market_chart?vs_currency=usd&days=1`;
+    const options = {
+    method: 'GET',
+    headers: {accept: 'application/json', 'x-cg-demo-api-key': API_KEY}
+    };
+    res.header("Access-Control-Allow-Origin", "*");
+    const {data} = await axios.get(url, options)
     res.json(data)
 })
 
