@@ -6,6 +6,7 @@ const app = express()
 const port = process.env.PORT || 3000
 
 app.use(cors())
+app.use(cors({ origin: process.env.CLIENT_URL }));
 app.use('/', routes);
 
 app.listen(port, () => {
