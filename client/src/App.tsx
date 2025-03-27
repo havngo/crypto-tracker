@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import './App.css';
 import {Currency} from './types';
 import HistoricalCharts from './components/HistoricalCharts/HistoricalCharts';
 import useCoins from './hooks/useCoins';
@@ -70,6 +69,7 @@ function App() {
             xLabels
           }
         ]} />)}
+        <p><i>Made by <a href='https://github.com/havngo'>Ha Ngo</a></i></p>
     </div>
     </>
   );

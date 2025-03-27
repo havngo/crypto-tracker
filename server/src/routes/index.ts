@@ -8,8 +8,14 @@ if (!API_KEY) {
     throw new Error('Missing API key to CoinGecko')
 }
 
+// in memory store of all supported coins
 let coinList: Coin[] = []
+// in memory store of historical price data
 let historyTrackerMap: Record<string, Record<string, object>> = {}
+
+router.get('/', (req, res) => {
+    res.json('Welcome to crypto tracker api endpoint... This is an empty route, try /coins, /coins/{coinId}, or /chart/{coinId}')
+})
 
 // supported coins with metadata (ie. coins ID, name, and symbol)
 router.get('/coins', async (req: Request, res: Response) => {
