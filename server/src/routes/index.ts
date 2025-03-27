@@ -9,7 +9,7 @@ if (!API_KEY) {
 }
 
 let coinList: Coin[] = []
-let historyTrackerMap: Record<string, object> = {}
+let historyTrackerMap: Record<string, Record<string, object>> = {}
 
 // supported coins with metadata (ie. coins ID, name, and symbol)
 router.get('/coins', async (req: Request, res: Response) => {
@@ -41,19 +41,23 @@ router.get('/coins/:id/:currency?', async (req: Request, res: Response) => {
 })
 
 // coin historical chart data
-router.get('/chart/:id', async (req: Request, res: Response) => {
+router.get('/chart/:id/:currency?', async (req: Request, res: Response) => {
     const coinId = req.params.id
-    if (historyTrackerMap[coinId]) {
-        res.json(historyTrackerMap[coinId])
+    const currency = req.params.currency
+    if (historyTrackerMap[coinId] && historyTrackerMap[coinId][currency]) {
+        res.json(historyTrackerMap[coinId][currency])
     } else {
-        const url = `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=1`;
+        const url = `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=${currency ?? 'usd'}&days=1`;
         const options = {
         method: 'GET',
         headers: {accept: 'application/json', 'x-cg-demo-api-key': API_KEY}
         };
         res.header("Access-Control-Allow-Origin", "*");
         const {data} = await axios.get(url, options)
-        historyTrackerMap[coinId] = data
+        if (!historyTrackerMap[coinId]) {
+            historyTrackerMap[coinId] = {}
+        }
+        historyTrackerMap[coinId][currency] = data
         res.json(data)
     }
 })

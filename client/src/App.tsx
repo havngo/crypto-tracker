@@ -4,7 +4,8 @@ import axios from 'axios';
 import TextField from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { LineChart } from '@mui/x-charts/LineChart';
-import Coin from './types/Coin';
+import {Coin, Currency} from './types';
+import { Select, MenuItem } from '@mui/material';
 
 const server_url = process.env.REACT_APP_SERVER_URL;
 if (!server_url) {
@@ -15,6 +16,7 @@ function App() {
   const [cryptoSymList, setCryptoSymList] = useState<Coin[]>([])
   const [coinId, setCoinId] = useState('');
   const [currentPrice, setCurrentPrice] = useState<number>();
+  const [currency, setCurrency] = useState<Currency>('usd');
 
   // historical chart
   const [prices, setPrices] = useState<number[]>()
@@ -28,13 +30,13 @@ function App() {
         return;
       }
       try {
-        const {data} = await axios.get(`${server_url}/coins/${coinId}`)
-        setCurrentPrice(data[coinId].usd)
+        const {data} = await axios.get(`${server_url}/coins/${coinId}/${currency}`)
+        setCurrentPrice(data[coinId][currency])
       } catch (e) {
         console.log('Error Fetching Price:::', e, coinId)
       }
     },
-    [coinId],
+    [coinId, currency],
   )
 
   const fetchCoins = useCallback(async () => {
@@ -51,7 +53,7 @@ function App() {
       return;
     }
     try {
-      const {data} = await axios.get(`${server_url}/chart/${coinId}`)
+      const {data} = await axios.get(`${server_url}/chart/${coinId}/${currency}`)
       const prices = data['prices'].map((elt: number[]) => elt[1])
       const marketCaps = data['market_caps'].map((elt: number[]) => elt[1])
       const vols = data['total_volumes'].map((elt: number[]) => elt[1])
@@ -105,7 +107,26 @@ function App() {
             }}
             renderInput={(params) => <TextField {...params} label="Enter cryptocurrency..." />}
           />
-        <p>Current Price: {currentPrice && `$${currentPrice}`}</p>
+          <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={currency}
+          label="Currency"
+          onChange={(event) => setCurrency(event.target.value as Currency)}
+        >
+          <MenuItem value={'usd'}>USD</MenuItem>
+          <MenuItem value={'vnd'}>VND</MenuItem>
+        </Select>
+        <h3>Current Price: {currentPrice && 
+          `${currency === 'usd' 
+            ? `${new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency
+              }).format(currentPrice)}` 
+            : `${new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency
+              }).format(currentPrice)}`}`}</h3>
       </div>
       {coinId && prices && marketCaps && totalVol && xLabels && (
         <><LineChart 
