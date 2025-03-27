@@ -24,25 +24,26 @@ export function CurrentPrice({
     stringify: opt => (opt as Coin).symbol
     }), []);
 
-    return <div style={{display: 'flex', flexDirection: 'row', gap: '5%'}}>
+    return <div style={{display: 'flex', flexDirection: 'row'}}>
+        <div style={{display: 'flex', flexDirection: 'row', height: '5%', width: '50%'}}>
         <Autocomplete
-        filterOptions={filterOptions}
-        onChange={(_, value) => {
-            if (value) {
-            setCoinId((value as Coin).id || '')
-            } 
-        }}
-        options={coins}
-        sx={{ width: 300 }}
-        getOptionLabel={opt => `${(opt as Coin).symbol} - ${(opt as Coin).name}`}
-        renderOption={(props, option) => {
-            return (
-            <li {...props} key={(option as Coin).id}>
-                {`${(option as Coin).symbol} - ${(option as Coin).name}`}
-            </li>
-            );
-        }}
-        renderInput={(params) => <TextField {...params} label="Enter cryptocurrency..." />}
+            filterOptions={filterOptions}
+            onChange={(_, value) => {
+                if (value) {
+                setCoinId((value as Coin).id || '')
+                } 
+            }}
+            options={coins}
+            sx={{ width: 300 }}
+            getOptionLabel={opt => `${(opt as Coin).symbol} - ${(opt as Coin).name}`}
+            renderOption={(props, option) => {
+                return (
+                <li {...props} key={(option as Coin).id}>
+                    {`${(option as Coin).symbol} - ${(option as Coin).name}`}
+                </li>
+                );
+            }}
+            renderInput={(params) => <TextField {...params} label="Enter cryptocurrency..." />}
         />
         <Select
             labelId="demo-simple-select-label"
@@ -54,6 +55,7 @@ export function CurrentPrice({
             <MenuItem value={'usd'}>USD</MenuItem>
             <MenuItem value={'vnd'}>VND</MenuItem>
         </Select>
+        </div>
         <h3>Current Price: {currentPrice && 
             `${currency === 'usd' 
             ? `${new Intl.NumberFormat('en-US', {
