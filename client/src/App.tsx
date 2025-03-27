@@ -4,11 +4,11 @@ import axios from 'axios';
 import TextField from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { LineChart } from '@mui/x-charts/LineChart';
+import Coin from './types/Coin';
 
-type Coin = {
-  id: string,
-  symbol: string,
-  name: string,
+const server_url = process.env.REACT_APP_SERVER_URL;
+if (!server_url) {
+  throw new Error('Missing server url')
 }
 
 function App() {
@@ -24,11 +24,14 @@ function App() {
 
   const fetchPrice = useCallback(
     async () => {
+      if (!coinId) {
+        return;
+      }
       try {
-        const {data} = await axios.get(`http://localhost:3456/coins/${coinId}`)
+        const {data} = await axios.get(`${server_url}/coins/${coinId}`)
         setCurrentPrice(data[coinId].usd)
       } catch (e) {
-        console.log('Error Fetch Price:::', e, coinId)
+        console.log('Error Fetching Price:::', e, coinId)
       }
     },
     [coinId],
@@ -36,16 +39,19 @@ function App() {
 
   const fetchCoins = useCallback(async () => {
     try {
-      const {data} = await axios.get(`http://localhost:3456/coins`)
+      const {data} = await axios.get(`${server_url}/coins`)
       setCryptoSymList(data as Coin[])
     } catch (e) {
-      console.log('Error Fetch Coins:::', e)
+      console.log('Error Fetching Coins:::', e)
     }
   }, [])
 
   const fetchChartData = useCallback(async () => {
+    if (!coinId) {
+      return;
+    }
     try {
-      const {data} = await axios.get(`http://localhost:3456/chart/${coinId}`)
+      const {data} = await axios.get(`${server_url}/chart/${coinId}`)
       const prices = data['prices'].map((elt: number[]) => elt[1])
       const marketCaps = data['market_caps'].map((elt: number[]) => elt[1])
       const vols = data['total_volumes'].map((elt: number[]) => elt[1])
@@ -56,7 +62,7 @@ function App() {
       setTotalVol(vols)
       setXLabels(xAxis)
     } catch (e) {
-      console.log('Error Fetch Chart:::', e)
+      console.log('Error Fetching Chart:::', e)
     }
   }, [coinId])
 
