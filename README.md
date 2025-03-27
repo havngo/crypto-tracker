@@ -16,12 +16,13 @@ A simple cryptocurrency price tracker that fetches real-time prices using a publ
 
 ### **Deployment:**
 - Hosted on a platform Vercel.
-- Clear instructions on how to access the deployed app.
+   + React: https://crypto-tracker-client.vercel.app/
+   + Express APIs: https://crypto-tracker-server-seven.vercel.app/ 
 
 ## Installation & Setup
 
 ### **Back-end Setup**
-1. Clone the repository:
+1. Clone the repository then copy `server/.env.sample` to `server/.env`:
    ```sh
    git clone https://github.com/your-username/crypto-tracker.git
    cd crypto-tracker/server
@@ -37,7 +38,7 @@ A simple cryptocurrency price tracker that fetches real-time prices using a publ
 4. API runs on `http://localhost:3456`
 
 ### **Front-end Setup**
-1. Navigate to the front-end directory:
+1. Navigate to the front-end directory then copy `client/.env.sample` to `client/.env`:
    ```sh
    cd ../client
    ```
@@ -52,7 +53,7 @@ A simple cryptocurrency price tracker that fetches real-time prices using a publ
 4. Open `http://localhost:3000` in the browser.
 
 ## Deployment Instructions
-- React App: crypto-tracker-client.vercel.app 
-- Express Server: crypto-tracker-server-seven.vercel.app
++ React: https://crypto-tracker-client.vercel.app/
++ Express APIs: https://crypto-tracker-server-seven.vercel.app/ 
 
 
